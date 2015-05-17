@@ -1,15 +1,29 @@
 
+CC = gcc
+OPS = -Wall
 LIB = -L/usr/local/lib -lcunit
 TRG = libaes.so
 
+.PHONY: all
 all: aes test sample
 aes:
-	gcc -shared -fPIC -o $(TRG) aes.c
+	$(CC) $(OPS) -O2 -shared -fPIC -o $(TRG) aes.c
 	strip $(TRG)
 test:
-	gcc -o test test_case.c $(LIB)
-sample:
-	gcc -o sample sample.c -Wl,-rpath=. -L. -laes
+	$(CC) -o test test_case.c -Wl,-rpath=/usr/local/lib $(LIB)
+sample: aes
+	$(CC) -o sample sample.c -Wl,-rpath=. -L. -laes
 
+.PHONY: install
+install: aes
+	cp libaes.so /usr/local/lib/
+	ln -s /usr/local/lib/libaes.so /usr/lib64/libaes.so
+	cp aes.h /usr/include/aes.h
+	
+.PHONY: uninstall
+uninstall:
+	rm -f /usr/local/lib/libaes.so /usr/lib64/libaes.so /usr/include/aes.h
+
+.PHONY: clean
 clean:
 	rm -f *.o libaes.so test sample

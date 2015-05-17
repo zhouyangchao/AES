@@ -12,6 +12,8 @@ extern "C" {
 #define PARM_ERROR 1
 #define NOT_INIT_KEY 2
 
+#define BLOCK_SIZE 16
+
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 
