@@ -22,7 +22,7 @@
 	| ((uint32_t)S_BOX[((x) >> 24)&0xFF] << 24) \
 	)
 
-static void rotate(uint8_t state[BLOCK_SIZE])
+static void transport(uint8_t state[BLOCK_SIZE])
 {
 	assert(state != NULL);
 	uint8_t _state[4][4];
@@ -54,11 +54,11 @@ static void _sub_bytes(uint8_t state[BLOCK_SIZE], const uint8_t *BOX)
 #define inv_sub_bytes(state) _sub_bytes(state, INV_S_BOX)
 
 #define _shift_rows(state, OP1, OP2, OP3) do { \
-	rotate(state); \
-	*(((uint32_t *)state)+1) = OP1(*(((uint32_t *)state)+1)); \
-	*(((uint32_t *)state)+2) = OP1(*(((uint32_t *)state)+2)); \
-	*(((uint32_t *)state)+3) = OP1(*(((uint32_t *)state)+3)); \
-	rotate(state); \
+	transport(state); \
+	*(uint32_t *)(state+4) = OP1(*(uint32_t *)(state+4)); \
+	*(uint32_t *)(state+8) = OP2(*(uint32_t *)(state+8)); \
+	*(uint32_t *)(state+12) = OP3(*(uint32_t *)(state+12)); \
+	transport(state); \
 } while(0)
 
 #define shift_rows(state) _shift_rows(state, ROTL8, ROTL16, ROTL24)

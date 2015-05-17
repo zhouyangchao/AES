@@ -7,7 +7,7 @@
 
 #include "aes.c"
 
-void test_rotate()
+void test_transport()
 {
 	uint8_t state[16] = {
 		0x01,0x02,0x03,0x04,
@@ -21,12 +21,12 @@ void test_rotate()
 		0x03,0x07,0x0b,0x0f,
 		0x04,0x08,0x0c,0x10
 	};
-	rotate(state);
+	transport(state);
 	int ret = memcmp(ret_state, state, 16);
 	CU_ASSERT_EQUAL(ret, 0);
 }
 
-void test_rotate_uint32_t()
+void test_transport_uint32_t()
 {
 	uint32_t state[4] = {
 		0x04030201,
@@ -40,7 +40,7 @@ void test_rotate_uint32_t()
 		0x0f0b0703,
 		0x100c0804,
 	};
-	rotate((uint8_t *)state);
+	transport((uint8_t *)state);
 	int ret = memcmp(ret_state, state, 16);
 	CU_ASSERT_EQUAL(ret, 0);
 }
@@ -262,8 +262,8 @@ void test_aes_decrypt_block()
 }
 
 CU_TestInfo test_case[] = {
-	{"test_rotate:", test_rotate},
-	{"test_rotate_uint32_t:", test_rotate_uint32_t},
+	{"test_transport:", test_transport},
+	{"test_transport_uint32_t:", test_transport_uint32_t},
 	{"test_add_round_key:", test_add_round_key},
 	{"test_sub_bytes/test_inv_sub_bytes:", test_sub_bytes_back},
 	{"test_shift_rows:", test_shift_rows},
