@@ -45,6 +45,7 @@ static void add_round_key(uint8_t state[BLOCK_SIZE], const uint8_t key[BLOCK_SIZ
 static void _sub_bytes(uint8_t state[BLOCK_SIZE], const uint8_t *BOX)
 {
 	assert(state != NULL);
+	assert(BOX != NULL);
 	int i;
 	for (i = 0; i < BLOCK_SIZE; ++i)
 		state[i] = BOX[state[i]];
@@ -81,6 +82,7 @@ static uint8_t GF_256(uint8_t a, uint8_t b)
 static void _mix_columns(uint8_t state[BLOCK_SIZE], const uint8_t matrix[][4])
 {
 	assert(state != NULL);
+	assert(matrix != NULL);
 	uint8_t _state[BLOCK_SIZE] = {0};
 	int r,c,i;
 	for (r = 0; r < 4; ++r)
@@ -126,7 +128,7 @@ static void key_expansion(aes_context *ctx, const uint8_t *key)
 	assert(ctx != NULL);
 	assert(key != NULL);
 	uint32_t Nk = ctx->nr - 6;
-	uint32_t Nr = ctx->nr;
+	uint32_t Ek = (ctx->nr+1)<<2;
 	uint32_t *RK = ctx->rk;
 	
 	uint32_t i = 0;
@@ -142,14 +144,13 @@ static void key_expansion(aes_context *ctx, const uint8_t *key)
 		else if (Nk == 8 && (i % Nk) == 4)
 			t = SUB_WORD(t);
 		RK[i] = RK[i-Nk]^t;
-	} while(++i < ((Nr+1)<<2));
+	} while(++i < Ek);
 }
 
 int aes_set_key(aes_context *ctx, const uint8_t *key, uint32_t key_bit)
 {
 	if (ctx == NULL || key == NULL)
 		return PARM_ERROR;
-	memset(ctx, 0, sizeof(aes_context));
 	switch (key_bit)
 	{
 		case 128: ctx->nr = 10; break;
