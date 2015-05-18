@@ -137,13 +137,13 @@ void test_shift_rows_back()
 	CU_ASSERT_EQUAL(ret, 0);
 }
 
-void test_GF_256()
+void test_GF_256_multiply()
 {
-	CU_ASSERT_EQUAL(GF_256(0x3a, 0x24), 0xe9);
-	CU_ASSERT_EQUAL(GF_256(0x02, 0x87), 0x15);
-	CU_ASSERT_EQUAL(GF_256(0x03, 0x6e), 0xb2);
-	CU_ASSERT_EQUAL(GF_256(0x46, 0x01), 0x46);
-	CU_ASSERT_EQUAL(GF_256(0xa6, 0x01), 0xa6);
+	CU_ASSERT_EQUAL(GF_256_multiply(0x3a, 0x24), 0xe9);
+	CU_ASSERT_EQUAL(GF_256_multiply(0x02, 0x87), 0x15);
+	CU_ASSERT_EQUAL(GF_256_multiply(0x03, 0x6e), 0xb2);
+	CU_ASSERT_EQUAL(GF_256_multiply(0x46, 0x01), 0x46);
+	CU_ASSERT_EQUAL(GF_256_multiply(0xa6, 0x01), 0xa6);
 }
 
 void test_mix_columns()
@@ -269,7 +269,7 @@ CU_TestInfo test_case[] = {
 	{"test_shift_rows:", test_shift_rows},
 	{"test_inv_shift_rows:", test_inv_shift_rows},
 	{"test_shift_rows_back:", test_inv_shift_rows},
-	{"test_GF_256:", test_GF_256},
+	{"test_GF_256_multiply:", test_GF_256_multiply},
 	{"test_mix_columns:", test_mix_columns},
 	{"test_inv_mix_columns:", test_inv_mix_columns},
 	CU_TEST_INFO_NULL

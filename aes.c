@@ -65,7 +65,7 @@ static void _sub_bytes(uint8_t state[BLOCK_SIZE], const uint8_t *BOX)
 #define shift_rows(state) _shift_rows(state, ROTL8, ROTL16, ROTL24)
 #define inv_shift_rows(state) _shift_rows(state, ROTL24, ROTL16, ROTL8)
 
-static uint8_t GF_256(uint8_t a, uint8_t b)
+static uint8_t GF_256_multiply(uint8_t a, uint8_t b)
 {
 	uint8_t t[8] = { a };
 	uint8_t ret = 0x00;
@@ -88,7 +88,7 @@ static void _mix_columns(uint8_t state[BLOCK_SIZE], const uint8_t matrix[][4])
 	for (r = 0; r < 4; ++r)
 		for (c = 0; c < 4; ++c)
 			for (i = 0; i < 4; ++i)
-				_state[(c<<2)+r] ^= GF_256(matrix[r][i], state[(c<<2)+i]);
+				_state[(c<<2)+r] ^= GF_256_multiply(matrix[r][i], state[(c<<2)+i]);
 	memcpy(state, _state, sizeof(_state));
 }
 
