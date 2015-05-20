@@ -207,6 +207,7 @@ void test_aes_set_key()
 
 void test_aes_encrypt_block()
 {
+	uint8_t ret_text[16] = {0};
 	uint8_t text[16] = {
 		0x01,0x23,0x45,0x67,
 		0x89,0xab,0xcd,0xef,
@@ -220,16 +221,32 @@ void test_aes_encrypt_block()
 		0x69,0x34,0xab,0x43,
 		0x64,0x14,0x8f,0xb9
 	};
-	uint8_t key[16] = {
+	uint8_t key[32] = {
+		0x0f,0x15,0x71,0xc9,
+		0x47,0xd9,0xe8,0x59,
+		0x0c,0xb7,0xad,0xd6,
+		0xaf,0x7f,0x67,0x98,
 		0x0f,0x15,0x71,0xc9,
 		0x47,0xd9,0xe8,0x59,
 		0x0c,0xb7,0xad,0xd6,
 		0xaf,0x7f,0x67,0x98
 	};
 	aes_context ctx;
-	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, sizeof(key)*8), SUCCESS);
+	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, 128), SUCCESS);
 	CU_ASSERT_EQUAL(aes_encrypt_block(&ctx, cipher_text, text), SUCCESS);
 	int ret = memcmp(ret_cipher_text, cipher_text, sizeof(ret_cipher_text));
+	CU_ASSERT_EQUAL(ret, 0);
+	
+	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, 192), SUCCESS);
+	CU_ASSERT_EQUAL(aes_encrypt_block(&ctx, cipher_text, text), SUCCESS);
+	CU_ASSERT_EQUAL(aes_decrypt_block(&ctx, ret_text, cipher_text), SUCCESS);
+	ret = memcmp(ret_text, text, sizeof(cipher_text));
+	CU_ASSERT_EQUAL(ret, 0);
+	
+	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, 256), SUCCESS);
+	CU_ASSERT_EQUAL(aes_encrypt_block(&ctx, cipher_text, text), SUCCESS);
+	CU_ASSERT_EQUAL(aes_decrypt_block(&ctx, ret_text, cipher_text), SUCCESS);
+	ret = memcmp(ret_text, text, sizeof(cipher_text));
 	CU_ASSERT_EQUAL(ret, 0);
 }
 
