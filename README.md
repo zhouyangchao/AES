@@ -1,5 +1,7 @@
 # AES
-an AES library with 128bit/192bit/256bit
+An AES library with 128bit/192bit/256bit
+
+http://blog.csdn.net/zycamym/article/details/45774767
 
 the main files are aes.h aes.c conf.c, test_case.c is a test with CUnit.
 
