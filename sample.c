@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "aes.h"
 
-void print(const uint8_t *msg, const uint8_t *buf)
+void print(const char *msg, const uint8_t *buf)
 {
 	printf("%s", msg);
 	int i;
@@ -34,7 +34,7 @@ int main()
 	uint32_t key_bit[3] = {128, 192, 256};
 	
 	aes_context ctx;
-	int i;
+	uint32_t i;
 	for (i = 0; i < sizeof(key_bit)/sizeof(key_bit[0]); ++i)
 	{
 		if (aes_set_key(&ctx, key, key_bit[i]) != SUCCESS)

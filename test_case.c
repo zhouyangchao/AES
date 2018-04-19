@@ -274,7 +274,6 @@ void test_aes_decrypt_block()
 	aes_context ctx;
 	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, sizeof(key)*8), SUCCESS);
 	CU_ASSERT_EQUAL(aes_decrypt_block(&ctx, ret_text, cipher_text), SUCCESS);
-	int ret = memcmp(ret_text, text, 16);
 	CU_ASSERT_EQUAL(memcmp(ret_text, text, 16), 0);
 }
 
@@ -313,9 +312,17 @@ int suite_success_clean(void){
 }
 
 CU_SuiteInfo suites[] = {
+#if CUNIT_VER == 2
+	{"testSuite1", suite_success_init, suite_success_clean, test_case},
+	{"testSuite2", suite_success_init, suite_success_clean, test_case_macro},
+	{"testSuite3", suite_success_init, suite_success_clean, test_case_main},
+#elif CUNIT_VER == 1
 	{"testSuite1", suite_success_init, suite_success_clean, NULL, NULL, test_case},
 	{"testSuite2", suite_success_init, suite_success_clean, NULL, NULL, test_case_macro},
 	{"testSuite3", suite_success_init, suite_success_clean, NULL, NULL, test_case_main},
+#else
+#error "unknown cunit version"
+#endif
 	CU_SUITE_INFO_NULL
 };
 

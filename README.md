@@ -22,4 +22,3 @@ The simplest way to compile this package is:
 
 ## Todos
 - Make compilation easier and more portable (maybe use autoconf and automake)
-- Distinguish the cunit version(1.x or 2.x) to choose the struct CU_SuiteInfo
