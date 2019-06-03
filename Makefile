@@ -1,28 +1,29 @@
-
 CC = gcc
-OPS = -std=c99 -Wall -Werror -Wextra -O2
-LIB = -lcunit
-TRG = libaes.so
+CFLAGS = -std=c99 -Wall -Wextra -Werror -O2 -Wl,-rpath=./
+LDLAGS = -lcunit
 PREFIX = /usr/local/
 
 CUNIT_VER = $(shell cat /usr/include/CUnit/CUnit.h | awk '$$0~/^\#define CU_VERSION/{print $$NF}')
 
-.PHONY: all test
-all: aes test
+.PHONY: all test sample
+all: aes
 
 aes: aes.c
-	$(CC) $(OPS) -shared -fPIC -o $(TRG) aes.c
+	$(CC) $(CFLAGS) -c -o aes.o $<
+	$(CC) $(CFLAGS) -shared -fPIC -o libaes.so aes.o
+	$(AR) rcs libaes.a aes.o
 
 test: aes test_case.c
 ifeq ($(CUNIT_VER), "2.1-2")
-	$(CC) $(OPS) -o test_case test_case.c $(LIB) -DCUNIT_VER=2
+	$(CC) $(CFLAGS) -o test_case test_case.c $(LDLAGS) -DCUNIT_VER=2
 else
-	$(CC) $(OPS) -o test_case test_case.c $(LIB) -DCUNIT_VER=1
+	$(CC) $(CFLAGS) -o test_case test_case.c $(LDLAGS) -DCUNIT_VER=1
 endif
 	./test_case
 
-sample: install sample.c
-	$(CC) $(OPS) -o sample sample.c -L./ -laes
+sample: aes sample.c
+	$(CC) $(CFLAGS) -o sample sample.c -L./ -laes
+	./sample
 
 .PHONY: install uninstall clean
 install: aes
@@ -34,4 +35,4 @@ uninstall:
 	rm -f $(PREFIX)/lib/libaes.so /usr/lib/libaes.so /usr/include/aes.h
 
 clean:
-	rm -f *.o libaes.so test_case sample
+	rm -f *.o *.so *.a test_case sample
