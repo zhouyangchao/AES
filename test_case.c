@@ -236,13 +236,13 @@ void test_aes_encrypt_block()
 	CU_ASSERT_EQUAL(aes_encrypt_block(&ctx, cipher_text, text), SUCCESS);
 	int ret = memcmp(ret_cipher_text, cipher_text, sizeof(ret_cipher_text));
 	CU_ASSERT_EQUAL(ret, 0);
-	
+
 	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, 192), SUCCESS);
 	CU_ASSERT_EQUAL(aes_encrypt_block(&ctx, cipher_text, text), SUCCESS);
 	CU_ASSERT_EQUAL(aes_decrypt_block(&ctx, ret_text, cipher_text), SUCCESS);
 	ret = memcmp(ret_text, text, sizeof(cipher_text));
 	CU_ASSERT_EQUAL(ret, 0);
-	
+
 	CU_ASSERT_EQUAL(aes_set_key(&ctx, key, 256), SUCCESS);
 	CU_ASSERT_EQUAL(aes_encrypt_block(&ctx, cipher_text, text), SUCCESS);
 	CU_ASSERT_EQUAL(aes_decrypt_block(&ctx, ret_text, cipher_text), SUCCESS);
@@ -330,7 +330,7 @@ void add_tests()
 {
 	assert(NULL != CU_get_registry());
 	assert(!CU_is_test_running());
-	
+
 	if(CUE_SUCCESS != CU_register_suites(suites)) {
 		exit(EXIT_FAILURE);
 	}
@@ -343,7 +343,7 @@ int run_test()
 		exit(EXIT_FAILURE);
 	} else {
 		add_tests();
-		
+
 		CU_basic_set_mode(CU_BRM_VERBOSE);
 		CU_basic_run_tests();
 
