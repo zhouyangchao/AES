@@ -4,24 +4,22 @@
 extern "C" {
 #endif
 
-#ifndef NULL
-#define NULL (void *)0
-#endif
+#include <stdint.h>
+#include <stdlib.h>
 
-#define SUCCESS 0
-#define PARM_ERROR 1
-#define NOT_INIT_KEY 2
+enum {
+	SUCCESS = 0,
+	PARM_ERROR = 1,
+	NOT_INIT_KEY = 2
+};
 
 #define BLOCK_SIZE 16
 
-typedef unsigned char uint8_t;
-typedef unsigned int uint32_t;
-
 typedef struct
 {
-	uint32_t nr;		// rounds
-	uint32_t *rk;		// round_key
-	uint32_t buf[68];	// store round_keys, each block is 4 bytes
+	uint32_t nr;                     // rounds
+	uint32_t *rk;                    // round_key
+	uint32_t buf[(BLOCK_SIZE+1)<<2]; // store round_keys, each block is 4 bytes
 } aes_context;
 
 int aes_set_key(aes_context *ctx, const uint8_t *key, uint32_t key_bit);

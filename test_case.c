@@ -345,12 +345,12 @@ int run_test()
 		add_tests();
 		
 		CU_basic_set_mode(CU_BRM_VERBOSE);
-        CU_basic_run_tests();
-		
+		CU_basic_run_tests();
+
 //		CU_set_output_filename("TestMax");
-//       CU_list_tests_to_file();
-//        CU_automated_run_tests();
-		
+//		CU_list_tests_to_file();
+//		CU_automated_run_tests();
+
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
@@ -358,5 +358,5 @@ int run_test()
 
 int main()
 {
-	run_test();
+	return run_test();
 }

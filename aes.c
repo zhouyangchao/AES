@@ -1,7 +1,7 @@
 #include<string.h>
 #include<assert.h>
 #include "aes.h"
-#include "conf.c"
+#include "aes_tbl.c"
 
 #ifndef GET_UINT32
 #define GET_UINT32(n,b,i) do { \

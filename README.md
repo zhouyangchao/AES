@@ -19,6 +19,3 @@ The simplest way to compile this package is:
 
   5. You can remove the program binaries and object files from the
      source code directory by typing `make clean'. 
-
-## Todos
-- Make compilation easier and more portable (maybe use autoconf and automake)

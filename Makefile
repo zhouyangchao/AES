@@ -1,36 +1,37 @@
 
 CC = gcc
 OPS = -std=c99 -Wall -Werror -Wextra -O2
-LIB = -L/usr/local/lib -lcunit
+LIB = -lcunit
 TRG = libaes.so
+PREFIX = /usr/local/
 
 CUNIT_VER = $(shell cat /usr/include/CUnit/CUnit.h | awk '$$0~/^\#define CU_VERSION/{print $$NF}')
 
-.PHONY: all
-all: aes test sample
-aes:
-	$(CC) $(OPS) -shared -fPIC -o $(TRG) aes.c
-	strip $(TRG)
-test: aes
-ifeq ($(CUNIT_VER), "2.1-2")
-	$(CC) $(OPS) -o test_case test_case.c -Wl,-rpath=/usr/local/lib $(LIB) -DCUNIT_VER=2
-else
-	$(CC) $(OPS) -o test_case test_case.c -Wl,-rpath=/usr/local/lib $(LIB) -DCUNIT_VER=1
-endif
-sample: aes
-	$(CC) $(OPS) -o sample sample.c -Wl,-rpath=. -L=. -laes
+.PHONY: all test
+all: aes test
 
-.PHONY: install
-install: uninstall aes
-	install libaes.so /usr/local/lib/
-	ln -s /usr/local/lib/libaes.so /usr/lib64/libaes.so
-	ln -s /usr/local/lib/libaes.so /usr/lib/libaes.so
+aes: aes.c
+	$(CC) $(OPS) -shared -fPIC -o $(TRG) aes.c
+
+test: aes test_case.c
+ifeq ($(CUNIT_VER), "2.1-2")
+	$(CC) $(OPS) -o test_case test_case.c $(LIB) -DCUNIT_VER=2
+else
+	$(CC) $(OPS) -o test_case test_case.c $(LIB) -DCUNIT_VER=1
+endif
+	./test_case
+
+sample: install sample.c
+	$(CC) $(OPS) -o sample sample.c -L./ -laes
+
+.PHONY: install uninstall clean
+install: aes
+	install libaes.so $(PREFIX)/lib/
+	ln -sf $(PREFIX)/lib/libaes.so /usr/lib/libaes.so
 	install aes.h /usr/include/aes.h
 	
-.PHONY: uninstall
 uninstall:
-	rm -f /usr/local/lib/libaes.so /usr/lib/libaes.so /usr/lib64/libaes.so /usr/include/aes.h
+	rm -f $(PREFIX)/lib/libaes.so /usr/lib/libaes.so /usr/include/aes.h
 
-.PHONY: clean
 clean:
 	rm -f *.o libaes.so test_case sample
