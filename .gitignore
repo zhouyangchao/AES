@@ -3,6 +3,8 @@
 *.ko
 *.obj
 *.elf
+test_case
+sample
 
 # Precompiled Headers
 *.gch
